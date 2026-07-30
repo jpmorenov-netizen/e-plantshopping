@@ -20,25 +20,29 @@ const CartItem = ({ onContinueShopping }) => {
 
   /**
    * Handles navigation back to the product listing page.
-   * @param {Event} e - Click event from the Continue Shopping button.
+   * Prevents default event behavior and invokes parent callback.
    */
   const handleContinueShopping = (e) => {
+    if (e && e.preventDefault) {
+      e.preventDefault();
+    }
     if (onContinueShopping) {
       onContinueShopping(e);
     }
   };
 
   /**
-   * Triggers checkout notification alert.
-   * @param {Event} e - Click event from the Checkout button.
+   * Triggers checkout notification alert for the user.
    */
   const handleCheckoutShopping = (e) => {
+    if (e && e.preventDefault) {
+      e.preventDefault();
+    }
     alert('Coming Soon');
   };
 
   /**
    * Dispatches Redux action to increase quantity of a specific item by 1.
-   * @param {Object} item - Cart item to increment.
    */
   const handleIncrement = (item) => {
     dispatch(updateQuantity({ name: item.name, quantity: item.quantity + 1 }));
@@ -46,7 +50,6 @@ const CartItem = ({ onContinueShopping }) => {
 
   /**
    * Dispatches Redux action to decrease item quantity, or removes item if quantity reaches 1.
-   * @param {Object} item - Cart item to decrement.
    */
   const handleDecrement = (item) => {
     if (item.quantity > 1) {
@@ -58,7 +61,6 @@ const CartItem = ({ onContinueShopping }) => {
 
   /**
    * Dispatches Redux action to completely remove an item from the cart.
-   * @param {Object} item - Cart item to remove.
    */
   const handleRemove = (item) => {
     dispatch(removeItem(item.name));
@@ -66,7 +68,6 @@ const CartItem = ({ onContinueShopping }) => {
 
   /**
    * Calculates the subtotal cost for a single item type in the cart.
-   * @param {Object} item - Cart item containing cost and quantity.
    */
   const calculateTotalCost = (item) => {
     const cost = parseFloat(item.cost.replace('$', '')) || 0;
@@ -95,8 +96,8 @@ const CartItem = ({ onContinueShopping }) => {
         ))}
       </div>
       <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'space-around' }}>
-        <button className="get-started-button" onClick={(e) => handleContinueShopping(e)} style={{ backgroundColor: '#4CAF50', color: 'white', padding: '10px 20px', border: 'none', cursor: 'pointer' }}>Continue Shopping</button>
-        <button className="get-started-button1" onClick={(e) => handleCheckoutShopping(e)} style={{ backgroundColor: '#4CAF50', color: 'white', padding: '10px 20px', border: 'none', cursor: 'pointer' }}>Checkout</button>
+        <button className="get-started-button" onClick={handleContinueShopping} style={{ backgroundColor: '#4CAF50', color: 'white', padding: '10px 20px', border: 'none', cursor: 'pointer' }}>Continue Shopping</button>
+        <button className="get-started-button1" onClick={handleCheckoutShopping} style={{ backgroundColor: '#4CAF50', color: 'white', padding: '10px 20px', border: 'none', cursor: 'pointer' }}>Checkout</button>
       </div>
     </div>
   );
