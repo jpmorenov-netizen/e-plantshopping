@@ -7,7 +7,6 @@ const CartItem = ({ onContinueShopping }) => {
   const cart = useSelector(state => state.cart.items);
   const dispatch = useDispatch();
 
-  // Calculate total amount for all products in the cart
   const calculateTotalAmount = () => {
     let total = 0;
     cart.forEach(item => {
@@ -17,27 +16,25 @@ const CartItem = ({ onContinueShopping }) => {
     return total.toFixed(2);
   };
 
-  // Continue shopping button handler
   const handleContinueShopping = (e) => {
     if (onContinueShopping) {
       onContinueShopping(e);
     }
   };
 
-  // Checkout button handler with complete event management
+  // FUNCIONALIDAD ADICIONAL AÑADIDA AQUÍ: 
+  // Muestra la alerta Y vacía el carrito por completo simulando una compra.
   const handleCheckoutShopping = (e) => {
     alert('Functionality to be added in future');
-    if (onContinueShopping) {
-      onContinueShopping(e);
-    }
+    cart.forEach(item => {
+      dispatch(removeItem(item.name));
+    });
   };
 
-  // Increment item quantity in cart
   const handleIncrement = (item) => {
     dispatch(updateQuantity({ name: item.name, quantity: item.quantity + 1 }));
   };
 
-  // Decrement item quantity or remove if quantity reaches zero
   const handleDecrement = (item) => {
     if (item.quantity > 1) {
       dispatch(updateQuantity({ name: item.name, quantity: item.quantity - 1 }));
@@ -46,12 +43,10 @@ const CartItem = ({ onContinueShopping }) => {
     }
   };
 
-  // Remove item completely from cart
   const handleRemove = (item) => {
     dispatch(removeItem(item.name));
   };
 
-  // Calculate subtotal cost for each individual item
   const calculateTotalCost = (item) => {
     const costNum = parseFloat(item.cost.replace('$', '')) || 0;
     return (costNum * item.quantity).toFixed(2);
