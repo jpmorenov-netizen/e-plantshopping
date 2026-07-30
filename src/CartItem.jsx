@@ -7,27 +7,47 @@ const CartItem = ({ onContinueShopping }) => {
   const cart = useSelector(state => state.cart.items);
   const dispatch = useDispatch();
 
+  /**
+   * Calculates the grand total amount for all items in the shopping cart.
+   * Strips the '$' sign from cost string and multiplies by item quantity.
+   */
   const calculateTotalAmount = () => {
     return cart.reduce((total, item) => {
-      const cost = parseFloat(item.cost.replace('$', ''));
+      const cost = parseFloat(item.cost.replace('$', '')) || 0;
       return total + cost * item.quantity;
     }, 0).toFixed(2);
   };
 
+  /**
+   * Handles navigation back to the product listing page.
+   * @param {Event} e - Click event from the Continue Shopping button.
+   */
   const handleContinueShopping = (e) => {
     if (onContinueShopping) {
       onContinueShopping(e);
     }
   };
 
+  /**
+   * Triggers checkout notification alert.
+   * @param {Event} e - Click event from the Checkout button.
+   */
   const handleCheckoutShopping = (e) => {
     alert('Coming Soon');
   };
 
+  /**
+   * Dispatches Redux action to increase quantity of a specific item by 1.
+   * @param {Object} item - Cart item to increment.
+   */
   const handleIncrement = (item) => {
     dispatch(updateQuantity({ name: item.name, quantity: item.quantity + 1 }));
   };
 
+  /**
+   * Dispatches Redux action to decrease item quantity, or removes item if quantity reaches 1.
+   * @param {Object} item - Cart item to decrement.
+   */
   const handleDecrement = (item) => {
     if (item.quantity > 1) {
       dispatch(updateQuantity({ name: item.name, quantity: item.quantity - 1 }));
@@ -36,12 +56,20 @@ const CartItem = ({ onContinueShopping }) => {
     }
   };
 
+  /**
+   * Dispatches Redux action to completely remove an item from the cart.
+   * @param {Object} item - Cart item to remove.
+   */
   const handleRemove = (item) => {
     dispatch(removeItem(item.name));
   };
 
+  /**
+   * Calculates the subtotal cost for a single item type in the cart.
+   * @param {Object} item - Cart item containing cost and quantity.
+   */
   const calculateTotalCost = (item) => {
-    const cost = parseFloat(item.cost.replace('$', ''));
+    const cost = parseFloat(item.cost.replace('$', '')) || 0;
     return (cost * item.quantity).toFixed(2);
   };
 
