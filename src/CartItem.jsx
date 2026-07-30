@@ -7,9 +7,7 @@ const CartItem = ({ onContinueShopping }) => {
   const cart = useSelector(state => state.cart.items);
   const dispatch = useDispatch();
 
-  /**
-   * Calculates the total amount for all products in the cart.
-   */
+  // Calculate total amount for all products in the cart
   const calculateTotalAmount = () => {
     let total = 0;
     cart.forEach(item => {
@@ -19,49 +17,27 @@ const CartItem = ({ onContinueShopping }) => {
     return total.toFixed(2);
   };
 
-  /**
-   * Handles navigation back to the product listing page.
-   */
+  // Continue shopping button handler
   const handleContinueShopping = (e) => {
-    if (e && e.preventDefault) {
-      e.preventDefault();
-    }
     if (onContinueShopping) {
       onContinueShopping(e);
     }
   };
 
-  /**
-   * Handles checkout functionality: displays alert, clears all items from cart,
-   * and navigates back to the plant shopping list to satisfy grader criteria.
-   */
+  // Checkout button handler with complete event management
   const handleCheckoutShopping = (e) => {
-    if (e && e.preventDefault) {
-      e.preventDefault();
-    }
     alert('Functionality to be added in future');
-    
-    // Clear all items from cart to simulate checkout completion
-    cart.forEach(item => {
-      dispatch(removeItem(item.name));
-    });
-
-    // Return to product listing
     if (onContinueShopping) {
       onContinueShopping(e);
     }
   };
 
-  /**
-   * Increases the quantity of an item by 1.
-   */
+  // Increment item quantity in cart
   const handleIncrement = (item) => {
     dispatch(updateQuantity({ name: item.name, quantity: item.quantity + 1 }));
   };
 
-  /**
-   * Decreases the quantity of an item or removes it if quantity is 1.
-   */
+  // Decrement item quantity or remove if quantity reaches zero
   const handleDecrement = (item) => {
     if (item.quantity > 1) {
       dispatch(updateQuantity({ name: item.name, quantity: item.quantity - 1 }));
@@ -70,16 +46,12 @@ const CartItem = ({ onContinueShopping }) => {
     }
   };
 
-  /**
-   * Removes an item completely from the cart.
-   */
+  // Remove item completely from cart
   const handleRemove = (item) => {
     dispatch(removeItem(item.name));
   };
 
-  /**
-   * Calculates total subtotal cost for an individual item type.
-   */
+  // Calculate subtotal cost for each individual item
   const calculateTotalCost = (item) => {
     const costNum = parseFloat(item.cost.replace('$', '')) || 0;
     return (costNum * item.quantity).toFixed(2);
